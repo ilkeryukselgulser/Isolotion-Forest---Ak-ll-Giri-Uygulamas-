@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Güvenli Kayıt</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+<div class="container">
+    <h2>Akıllı Giriş Sistemi</h2>
+    <p>Hesap Güvenliği Modülü</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="/register">
+        <div style="display: none;">
+            <label>Website</label>
+            <input type="text" name="website" tabindex="-1" autocomplete="off">
+        </div>
+
+        <div class="input-group">
+            <label>Kullanıcı Adı</label>
+            <input type="text" name="username" required>
+        </div>
+
+        <div class="input-group password-container">
+            <label>Şifre</label>
+            <input type="password" id="passwordInput" name="password" required>
+            <i class="fa-solid fa-eye" id="togglePassword"></i>
+        </div>
+
+        <div class="strength-meter">
+            <div class="bar" id="strengthBar"></div>
+        </div>
+        <p id="strengthText">Şifre Gücü: Zayıf</p>
+
+        <ul class="requirements">
+            <li id="req-length">🔴 En az 8 Karakter</li>
+            <li id="req-lower">🔴 Küçük Harf (a-z)</li>
+            <li id="req-upper">🔴 Büyük Harf (A-Z)</li>
+            <li id="req-num">🔴 Rakam (0-9)</li>
+            <li id="req-special">🔴 Özel Karakter (!@#..)</li>
+        </ul>
+
+        <button type="submit">Güvenli Kayıt Ol</button>
+    </form>
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

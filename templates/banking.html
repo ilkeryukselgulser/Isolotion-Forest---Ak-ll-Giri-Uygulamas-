@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>IYG Bank - İnternet Şubesi</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f0f2f5;
+        }
+
+        .navbar {
+            background-color: #0d1e4c;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logout-btn {
+            color: white;
+            text-decoration: none;
+            background: #c0392b;
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .balance-card {
+            background: linear-gradient(135deg, #0d1e4c, #2a5298);
+            color: white;
+        }
+
+        .balance-title {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .balance-amount {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .iban {
+            font-family: monospace;
+            letter-spacing: 1px;
+            opacity: 0.8;
+        }
+
+        h3 {
+            color: #333;
+            margin-top: 0;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .transaction-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .transaction-info h4 {
+            margin: 0 0 5px 0;
+            font-size: 16px;
+            color: #444;
+        }
+
+        .transaction-date {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .amount {
+            font-weight: bold;
+        }
+
+        .amount.negative {
+            color: #e74c3c;
+        }
+
+        .amount.positive {
+            color: #27ae60;
+        }
+
+        .quick-actions button {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 15px;
+            width: 100%;
+            border-radius: 8px;
+            cursor: pointer;
+            color: #555;
+            font-weight: bold;
+            margin-bottom: 10px;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quick-actions button:hover {
+            background: #e9ecef;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="navbar-brand"><i class="fas fa-university"></i> IYG Bank</div>
+        <div class="user-info">
+            <span>Hoş geldin, <strong>{{ username }}</strong></span>
+            <a href="/logout" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Çıkış</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Mesaj Kutusu -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div style="padding: 15px; background: #d4edda; color: #155724; border-radius: 8px; margin-bottom: 20px;">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <div class="dashboard-grid">
+            <!-- Sol Kolon -->
+            <div>
+                <!-- Bakiye Kartı -->
+                <div class="card balance-card">
+                    <div class="balance-title">TOPLAM VARLIKLARIM</div>
+                    <div class="balance-amount">₺ 142,500.00</div>
+                    <div class="iban">TR56 0006 1000 0000 1234 5678 90</div>
+                </div>
+
+                <!-- Son İşlemler -->
+                <div class="card">
+                    <h3>Son Hesap Hareketleri</h3>
+                    <ul class="transaction-list">
+                        <li class="transaction-item">
+                            <div class="transaction-info">
+                                <h4>Amazon.com.tr</h4>
+                                <span class="transaction-date">Bugün, 14:30</span>
+                            </div>
+                            <span class="amount negative">- 450.90 TL</span>
+                        </li>
+                        <li class="transaction-item">
+                            <div class="transaction-info">
+                                <h4>Maaş Ödemesi</h4>
+                                <span class="transaction-date">Dün, 09:00</span>
+                            </div>
+                            <span class="amount positive">+ 65,000.00 TL</span>
+                        </li>
+                        <li class="transaction-item">
+                            <div class="transaction-info">
+                                <h4>Netflix Abonelik</h4>
+                                <span class="transaction-date">23 Ekim 2023</span>
+                            </div>
+                            <span class="amount negative">- 119.99 TL</span>
+                        </li>
+                        <li class="transaction-item">
+                            <div class="transaction-info">
+                                <h4>EFT Gelen: Ahmet Yılmaz</h4>
+                                <span class="transaction-date">22 Ekim 2023</span>
+                            </div>
+                            <span class="amount positive">+ 2,500.00 TL</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Sağ Kolon -->
+            <div>
+                <div class="card">
+                    <h3>Hızlı İşlemler</h3>
+                    <div class="quick-actions">
+                        <button><i class="fas fa-money-bill-wave"></i> Para Transferi</button>
+                        <button><i class="fas fa-qrcode"></i> QR ile Öde</button>
+                        <button><i class="fas fa-file-invoice"></i> Fatura Öde</button>
+                        <button><i class="fas fa-credit-card"></i> Kart Ayarları</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Kredi Kartı</h3>
+                    <div
+                        style="background: linear-gradient(45deg, #111, #333); color: white; padding: 20px; border-radius: 10px; margin-bottom: 10px;">
+                        <div style="font-size: 18px; letter-spacing: 2px;">4543 **** **** 9088</div>
+                        <div
+                            style="display: flex; justify-content: space-between; margin-top: 20px; opacity: 0.8; font-size: 12px;">
+                            <span>{{ username|upper }}</span>
+                            <span>12/28</span>
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 14px; margin-top: 10px;">
+                        <span>Kalan Limit:</span>
+                        <strong>12,450 TL</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

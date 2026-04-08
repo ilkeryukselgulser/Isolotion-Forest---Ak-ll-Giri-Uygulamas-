@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Giriş Yap - Akıllı Güvenlik</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+<div class="container">
+    <h2>Güvenli Giriş</h2>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="/login">
+        <div style="display: none;">
+            <label>Website</label>
+            <input type="text" name="website" tabindex="-1" autocomplete="off">
+        </div>
+
+        <div class="input-group">
+            <label>Kullanıcı Adı</label>
+            <input type="text" name="username" required>
+        </div>
+
+        <div class="input-group password-container">
+            <label>Şifre</label>
+            <input type="password" id="passwordInput" name="password" required>
+            <i class="fa-solid fa-eye" id="togglePassword"></i>
+        </div>
+
+        <button type="submit" {% if banned %}disabled style="background-color: #ccc; cursor: not-allowed;"{% endif %}>
+            {% if banned %}Engellendi{% else %}Giriş Yap{% endif %}
+        </button>
+    </form>
+    
+    <div style="margin-top: 15px; text-align: center;">
+        <a href="/register" style="text-decoration: none; color: #007bff; font-weight: bold;">Hesabın yok mu? Hemen Kayıt Ol</a>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

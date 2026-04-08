@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Güvenlik Yönetim Paneli</title>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            padding: 20px;
+            background-color: #f4f6f9;
+            color: #333;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            color: #444;
+        }
+
+        .charts-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            gap: 20px;
+        }
+
+        .chart-box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            flex: 1;
+        }
+
+        .chart-title {
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        h2 {
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            font-size: 13px;
+        }
+
+        th,
+        td {
+            border: 1px solid #eee;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+            font-weight: normal;
+        }
+
+        tr:nth-child(even) {
+            background-color: #fcfcfc;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 8px 15px;
+            background: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .back-btn:hover {
+            background: #5a6268;
+        }
+
+        .timestamp {
+            color: #888;
+        }
+    </style>
+</head>
+
+<body>
+
+    <a href="/login" class="back-btn">← Giriş Ekranına Dön</a>
+
+    <div class="header">
+        <h1>Güvenlik Yönetim Paneli (Admin Dashboard) - Simülasyon</h1>
+    </div>
+
+    <div class="charts-container">
+        <!-- Sol Grafik: Bar Chart -->
+        <div class="chart-box">
+            <div class="chart-title">⚠️ En Çok Hata Yapan / Saldıran IP Adresleri</div>
+            <canvas id="ipChart"></canvas>
+        </div>
+
+        <!-- Sağ Grafik: Pie/Doughnut Chart -->
+        <div class="chart-box">
+            <div class="chart-title">🛡️ Sistem Sağlık Durumu</div>
+            <canvas id="healthChart" style="max-height: 250px;"></canvas>
+        </div>
+    </div>
+
+    <div>
+        <h2>📋 Son Saldırı Kayıtları (Audit Logs)</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>IP Adresi</th>
+                    <th>Denenen Kullanıcı</th>
+                    <th>Zaman Damgası</th>
+                    <th>Durum / Aksiyon</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in logs %}
+                <tr>
+                    <td style="font-weight: bold; color: #444;">{{ log.ip_address }}</td>
+                    <td>{{ log.username_tried }}</td>
+                    <td class="timestamp">{{ log.timestamp }}</td>
+                    <td>{{ log.action_taken }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4" style="text-align:center;">Henüz kayıt yok.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Script Kısmı -->
+    <script>
+        // Backend'den gelen verileri al
+        // 'safe' filtresi JSON string'inin bozulmamasını sağlar.
+        const ipLabels = {{ chart_ips | safe }};
+        const ipCounts = {{ chart_counts | safe }};
+
+        const userCount = {{ stat_users }};
+        const banCount = {{ stat_bans }};
+
+        // --- 1. IP Chart (Bar) ---
+        const ctxIp = document.getElementById('ipChart').getContext('2d');
+        new Chart(ctxIp, {
+            type: 'bar',
+            data: {
+                labels: ipLabels,
+                datasets: [{
+                    label: 'Hata Sayısı',
+                    data: ipCounts,
+                    backgroundColor: '#ff8fab',
+                    borderColor: '#ff5c8d',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+
+        // --- 2. Health Chart (Doughnut) ---
+        const ctxHealth = document.getElementById('healthChart').getContext('2d');
+        new Chart(ctxHealth, {
+            type: 'doughnut',
+            data: {
+                labels: ['Aktif Kullanıcılar', 'Banlanan Tehditler'],
+                datasets: [{
+                    data: [userCount, banCount],
+                    backgroundColor: ['#36a2eb', '#ffce56'],
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'right' }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

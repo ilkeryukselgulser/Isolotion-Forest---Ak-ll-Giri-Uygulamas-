@@ -1,0 +1,39 @@
+body { font-family: 'Segoe UI', sans-serif; background-color: #f4f6f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+.container { background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 350px; }
+h2 { text-align: center; color: #333; }
+.input-group { margin-bottom: 15px; }
+.input-group label { display: block; margin-bottom: 5px; color: #666; }
+.input-group input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+button { width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin-top: 10px;}
+button:hover { background: #0056b3; }
+
+/* Güç Çubuğu Tasarımı */
+.strength-meter { height: 5px; background: #ddd; margin-top: 10px; border-radius: 3px; overflow: hidden; }
+.bar { height: 100%; width: 0%; transition: width 0.3s, background-color 0.3s; }
+
+/* Gereksinim Listesi */
+.requirements { list-style: none; padding: 0; font-size: 12px; margin-top: 15px; }
+.requirements li { margin-bottom: 4px; color: #555; transition: color 0.3s; }
+.valid { color: green; font-weight: bold; } /* Şart sağlanınca yeşil olacak */
+
+.alert { padding: 10px; margin-bottom: 15px; border-radius: 5px; font-size: 14px; }
+.alert-danger { background: #f8d7da; color: #721c24; }
+.alert-success { background: #d4edda; color: #155724; }
+
+.password-container {
+    position: relative; /* İkon buna göre konumlanacak */
+}
+
+/* Göz İkonunun Tasarımı */
+#togglePassword {
+    position: absolute;
+    right: 15px;      /* Sağdan 15px içeride */
+    top: 42px;        /* Yukarıdan (Label payı dahil) hizalama */
+    cursor: pointer;  /* Üzerine gelince el işareti çıksın */
+    color: #666;
+    font-size: 18px;
+}
+
+#togglePassword:hover {
+    color: #007bff; /* Üzerine gelince mavi olsun */
+}
