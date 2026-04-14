@@ -3,12 +3,11 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import datetime
 
-# --- AYARLAR ---
-# GÖNDEREN MAİL BİLGİLERİ (Burası sizin doldurmanız gereken kısım)
-SENDER_EMAIL = "ilkeryuk.gulser@gmail.com"  # Buraya Gmail adresinizi yazın
-SENDER_PASSWORD = "brgq ruek iqkj oefz" # Buraya 16 haneli Uygulama Şifresini yazın
 
-# ALICI MAİL (User'ın verdiği adres)
+SENDER_EMAIL = "ilkeryuk.gulser@gmail.com"  
+SENDER_PASSWORD = 
+
+
 ADMIN_EMAIL = "ilkeryukselgulser1907@gmail.com"
 
 def send_anomaly_alert(ip_address, hour, attempts):
@@ -38,16 +37,16 @@ def send_anomaly_alert(ip_address, hour, attempts):
     """
 
     try:
-        # Mesaj Oluşturma
+     
         msg = MIMEMultipart()
         msg['From'] = SENDER_EMAIL
         msg['To'] = ADMIN_EMAIL
         msg['Subject'] = subject
         msg.attach(MIMEText(body, 'plain', 'utf-8'))
 
-        # Gmail sunucusuna bağlan (SMTP 587)
+     
         server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.starttls() # Güvenli bağlantı
+        server.starttls() 
         server.login(SENDER_EMAIL, SENDER_PASSWORD.replace(" ", ""))
         text = msg.as_string()
         server.sendmail(SENDER_EMAIL, ADMIN_EMAIL, text)
